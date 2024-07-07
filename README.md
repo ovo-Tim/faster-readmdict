@@ -1,79 +1,63 @@
-# readmdict [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![PyPI version](https://badge.fury.io/py/readmdict.svg)](https://badge.fury.io/py/readmdict)
+# Faster-readmdict
 
-Read mdx/mdd files (repacking of readmdict from mdict-analysis)
+Use Cython to speed up `readmdict.py`
 
-This is a repacking of `readmdict.py` in [https://github.com/csarron/mdict-analysis](https://github.com/csarron/mdict-analysis). All credit goes to the original author(s).
-
-## Prerequisite `python-lzo`
-If `python-lzo` is not present, you' ll see "LZO compression support is not available" when running `readmdict`. 
-
-```bash
-pip install python-lzo
-# or poetry add python-lzo
+Original edition:
+```
+❯ time python -m readmdict ./concise-enhanced.mdx
+======== b'./concise-enhanced.mdx' ========
+  Number of Entries : 3402564
+  GeneratedByEngineVersion : 2.0
+  RequiredEngineVersion : 2.0
+  Format : Html
+  KeyCaseSensitive : No
+  StripKey : Yes
+  Encrypted : 2
+  Description : <font size=5 color=red>简明英汉字典增强版：20170605<br>
+(数据：http://github.com/skywind3000/ECDICT)<br>
+ 1. 开源英汉字典：MIT / CC 双协议<br>
+ 2. 标注牛津三千关键词：音标后 K字符<br>
+ 3. 柯林斯星级词汇标注：音标后 1-5的数字<br>
+ 4. 标注 COCA/BNC 的词频顺序<br>
+ 5. 标注考试大纲信息：中高研四六托雅 等<br>
+</font>
+  Title : 简明英汉字典增强版 - CSS
+  Encoding : UTF-8
+  CreationDate : 2017-6-4
+  Compact : No
+  Compat : No
+  Left2Right : Yes
+  DataSourceFormat : 107
+  StyleSheet :
+python -m readmdict ./concise-enhanced.mdx  4.99s user 0.28s system 99% cpu 5.275 total
 ```
 
-In Windows without a functioning C++ environment, you won't be able to install `python-lzo` via `pip`. Head to
-[https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo). Download and install `python-lzo` whl for your python version.
-
-## Installation
-```bash
-pip install readmdict
-# or poetry add readmdict
+Ours:
 ```
-
-## Usage
-
-### Command line
-*   Browse a mdx or mdd file and print its meta information
-```bash
-readmdict
-```
-or
-```bash
-python -m readmdict
-```
-
-
-*   Print meta info of a file `file.mdx`
-```bash
-readmdict file.mdx
-```
-or
-```bash
-python -m readmdict file.mdx
-```
-
-*   Print a short summary
-```bash
-readmdict -h
-```
-or
-```bash
-python -m readmdict -h
-```
-
-### In Python code
-```python
-from readmdict import MDX, MDD
-
-filename = "some.mdx"
-headwords = [*MDX(filename).header]
-print(headwords[:10])  # fisrt 10 in bytes format
-for hdw in headwords[:10]:
-	print(hdw.decode())   # fisrt 10 in string format
-
-items = [*MDX(filename).items()]
-for key, val in items[:10]:
-	print(key.decode(), val.decode())  # first 10 entries
-
-# read an mdd file
-filename = "some.mdd"
-items = MDD(filename).items()
-idx = 0
-for filename, content in items:
-  idx += 1
-  if idx > 10:
-    break
-	print(filename.decode(), content.decode())  # first 10 entries
-
+❯ time python ./readmdict/__main__.py ../ecdict-mdx-style-28/concise-enhanced.mdx
+======== b'../ecdict-mdx-style-28/concise-enhanced.mdx' ========
+  Number of Entries : 3402564
+  GeneratedByEngineVersion : 2.0
+  RequiredEngineVersion : 2.0
+  Format : Html
+  KeyCaseSensitive : No
+  StripKey : Yes
+  Encrypted : 2
+  Description : <font size=5 color=red>简明英汉字典增强版：20170605<br>
+(数据：http://github.com/skywind3000/ECDICT)<br>
+ 1. 开源英汉字典：MIT / CC 双协议<br>
+ 2. 标注牛津三千关键词：音标后 K字符<br>
+ 3. 柯林斯星级词汇标注：音标后 1-5的数字<br>
+ 4. 标注 COCA/BNC 的词频顺序<br>
+ 5. 标注考试大纲信息：中高研四六托雅 等<br>
+</font>
+  Title : 简明英汉字典增强版 - CSS
+  Encoding : UTF-8
+  CreationDate : 2017-6-4
+  Compact : No
+  Compat : No
+  Left2Right : Yes
+  DataSourceFormat : 107
+  StyleSheet :
+python ./readmdict/__main__.py ../ecdict-mdx-style-28/concise-enhanced.mdx  3.32s user 0.29s system 99% cpu 3.608 total
 ```

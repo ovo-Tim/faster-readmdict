@@ -2,3 +2,9 @@
 **/__pycache__
 dist
 readmdict.egg-info
+
+readmdict/CY_MDict/*.so
+readmdict/CY_MDict/*.pyd
+readmdict/CY_MDict/build/
+readmdict/CY_MDict/*.c
+readmdict/CY_MDict/*.html

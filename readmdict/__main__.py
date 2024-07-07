@@ -5,7 +5,7 @@ import os
 import os.path
 import sys
 
-from .readmdict import MDD, MDX, unicode
+from readmdict import MDD, MDX, unicode
 
 
 def main():
