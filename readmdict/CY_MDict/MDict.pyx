@@ -66,13 +66,11 @@ cdef class MDict(object):
         self._passcode = passcode
 
         self.header = self._read_header()
-        # self._key_list = self._read_keys()
         try:
             self._key_list = self._read_keys()
         except Exception:
             print("Try Brutal Force on Encrypted Key Blocks")
             self._key_list = self._read_keys_brutal()
-
 
     def __len__(self):
         return self._num_entries
@@ -191,26 +189,27 @@ cdef class MDict(object):
 
 
     cdef list _split_key_block(self, bytes key_block):
-        cdef list key_list = []
-        cdef size_t key_start_index = 0, width, i, key_id, key_end_index
-        cdef bytes delimiter, key_text
-        while key_start_index < len(key_block):
+        cdef list[tuple[size_t, bytes]] key_list = []
+        cdef size_t key_start_index = 0, width, i, key_id, key_end_index, key_block_len = len(key_block)
+        cdef bytes key_text, delimiter
+        # key text ends with '\x00'
+        if self._encoding == 'UTF-16':
+            delimiter = b'\x00\x00'
+            width = 2
+        else:
+            delimiter = b'\x00'
+            width = 1
+        while key_start_index < key_block_len:
             # the corresponding record's offset in record block
             key_id = unpack(self._number_format, key_block[key_start_index:key_start_index+self._number_width])[0]
-            # unpack(self._number_format, key_block[key_start_index:key_start_index+self._number_width])[0]
-            # key text ends with '\x00'
-            if self._encoding == 'UTF-16':
-                delimiter = b'\x00\x00'
-                width = 2
-            else:
-                delimiter = b'\x00'
-                width = 1
+
             i = key_start_index + self._number_width
-            while i < len(key_block):
+            while i < key_block_len:
                 if key_block[i:i+width] == delimiter:
                     key_end_index = i
                     break
                 i += width
+
             key_text = key_block[key_start_index+self._number_width:key_end_index]\
                 .decode(self._encoding, errors='ignore').encode('utf-8').strip()
             key_start_index = key_end_index + width
