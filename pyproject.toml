@@ -1,11 +1,13 @@
 [tool.poetry]
-name = "readmdict"
+name = "faster-readmdict"
 version = "0.1.1"
 description = "readmdict (simple repacking of readmdict in mdict-analysis)"
-authors = ["freemt"]
+authors = ["ovo-Tim"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/ffreemt/readmdict"
+repository = "https://github.com/ovo-Tim/faster-readmdict"
+include = ["readmdict/CY_MDict/*.so"]
+packages = [{include = "readmdict"}]
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
@@ -16,6 +18,15 @@ pytest = "^6.2.2"
 [tool.poetry.scripts]
 readmdict = "readmdict.__main__:main"
 
+[tool.poetry.build]
+script = "readmdict/CY_MDict/setup.py"
+generate-setup-file = false
+
+[tool.poetry.group.dev.dependencies]
+cython = "^3.0.10"
+setuptools = "^69.5.1"
+wheel = "^0.43.0"
+
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core", "Cython", "setuptools"]
 build-backend = "poetry.core.masonry.api"

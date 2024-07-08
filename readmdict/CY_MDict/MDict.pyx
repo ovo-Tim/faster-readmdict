@@ -7,8 +7,8 @@ from struct import pack, unpack
 import re
 from io import BytesIO
 
-from ripemd128 import ripemd128
-from pureSalsa20 import Salsa20
+from ..ripemd128 import ripemd128
+from ..pureSalsa20 import Salsa20
 
 def _fast_decrypt(data, key):
     b = bytearray(data)
