@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "faster-readmdict"
-version = "0.1.4"
+version = "0.2.0"
 description = "readmdict (simple repacking of readmdict in mdict-analysis)"
 authors = ["ovo-Tim"]
 license = "MIT"
