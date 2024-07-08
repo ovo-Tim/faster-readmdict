@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "faster-readmdict"
-version = "0.1.3"
+version = "0.1.4"
 description = "readmdict (simple repacking of readmdict in mdict-analysis)"
 authors = ["ovo-Tim"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/ovo-Tim/faster-readmdict"
-include = ["readmdict/CY_MDict/*.so"]
+include = ["readmdict/CY_MDict/*.so", "readmdict/CY_MDict/*.pyd"]
 packages = [{include = "readmdict"}]
 
 [tool.poetry.dependencies]
