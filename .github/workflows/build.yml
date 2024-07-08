@@ -13,9 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build
-      run: |
-        poetry build
+        run: |
+          poetry build
+
       - name: Publish
         run: |
-          poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+          poetry config "pypi-token.pypi" ${{ secrets.PYPI_API_TOKEN }}
           poetry publish
