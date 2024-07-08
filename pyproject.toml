@@ -20,7 +20,6 @@ readmdict = "readmdict.__main__:main"
 
 [tool.poetry.build]
 script = "readmdict/CY_MDict/setup.py"
-generate-setup-file = false
 
 [tool.poetry.group.dev.dependencies]
 cython = "^3.0.10"

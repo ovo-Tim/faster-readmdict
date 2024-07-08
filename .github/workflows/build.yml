@@ -13,11 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build
+        shell: bash
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           poetry build
 
       - name: Publish
+        shell: bash
         run: |
           poetry config "pypi-token.pypi" ${{ secrets.PYPI_API_TOKEN }}
           poetry publish
